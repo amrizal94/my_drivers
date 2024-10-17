@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".Fragments.SigninFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <EditText
+            android:id="@+id/textEmail"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:autofillHints="put your name"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:drawableStart="@drawable/icon_email_black"
+            android:drawablePadding="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"/>
+
+        <EditText
+            android:id="@+id/textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:autofillHints="enter your password"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:drawableStart="@drawable/icon_password"
+            android:drawablePadding="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:text="@string/forgot_password"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonbg"
+            android:text="@string/sign_in"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".Fragments.SignupFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <EditText
+            android:id="@+id/textName"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:autofillHints="put your name"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/icon_user"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/textEmail"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:layout_marginTop="20dp"
+            android:autofillHints="put your email"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/icon_email_black"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/textNumber"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:layout_marginTop="20dp"
+            android:autofillHints="put your number phone"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/icon_hp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:hint="@string/mobile_number"
+            android:inputType="phone"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+
+            android:layout_marginTop="20dp"
+            android:autofillHints="put your number phone"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/icon_password"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/text_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:text="@string/already_have_in_account"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonbg"
+            android:text="@string/sign_up"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

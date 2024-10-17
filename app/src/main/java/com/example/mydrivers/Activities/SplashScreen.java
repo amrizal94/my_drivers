@@ -1,4 +1,4 @@
-package com.example.mydrivers;
+package com.example.mydrivers.Activities;
 
 import android.os.Bundle;
 import android.view.animation.Animation;
@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mydrivers.R;
 
 public class SplashScreen extends AppCompatActivity {
     ImageView Roadmap, Car;

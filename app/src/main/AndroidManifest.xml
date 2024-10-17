@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="READ_MEDIA_IMAGE" />
+    <uses-permission android:name="ediaStore. createWriteReques" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -12,8 +14,8 @@
         android:required="true" />
 
     <application
-        android:banner="@layout/activity_splash_screen"
         android:allowBackup="true"
+        android:banner="@layout/activity_splash_screen"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -23,14 +25,20 @@
         android:theme="@style/Theme.MyDrivers"
         tools:targetApi="31">
         <activity
-            android:name=".SplashScreen"
+            android:name=".Activities.Authentication"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".Activities.SplashScreen"
+            android:exported="false">
+
+        </activity>
+        <activity android:name=".Activities.MainActivity" />
     </application>
 
 </manifest>
