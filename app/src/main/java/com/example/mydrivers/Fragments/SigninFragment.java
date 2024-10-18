@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mydrivers.Activities.SplashScreen;
+import com.example.mydrivers.Activities.MainActivity;
 import com.example.mydrivers.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -83,7 +83,7 @@ public class SigninFragment extends Fragment {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 kProgressHUD.dismiss();
                 if (task.isSuccessful()){
-                    Intent intent = new Intent(getContext(), SplashScreen.class);
+                    Intent intent = new Intent(getContext(), MainActivity.class);
                     startActivity(intent);
                 }
             }).addOnFailureListener(e -> {

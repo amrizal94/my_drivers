@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Map"
+        android:id="@+id/item_map"
+        android:icon="@drawable/icon_gps"/>
+    <item
+        android:id="@+id/item_driver"
+        android:icon="@drawable/driving"
+        android:title="Driver" />
+    <item
+        android:id="@+id/item_profile"
+        android:icon="@drawable/icon_profile"
+        android:title="Profile" />
+</menu>
