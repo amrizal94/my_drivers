@@ -13,14 +13,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mydrivers.Model.LocationViewModel;
 import com.example.mydrivers.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +37,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
+    private LocationViewModel locationViewModel;
 
+    private TextView tv_location;
     private Uri uriImage;
     private String uriPhoto;
     private Bitmap bitmap;
@@ -48,14 +53,19 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ivProfile = view.findViewById(R.id.image_profile);
+        tv_location = view.findViewById(R.id.tx_location);
         MaterialCardView selectPhoto = view.findViewById(R.id.cv_photo);
         selectPhoto.setOnClickListener(v -> CheckStoragePermission());
+
+        locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
         firestore = FirebaseFirestore.getInstance();
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        locationViewModel.getLocation().observe(getViewLifecycleOwner(), location -> tv_location.setText(location));
         return view;
     }
 

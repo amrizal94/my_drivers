@@ -1,13 +1,21 @@
 package com.example.mydrivers.Fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mydrivers.Activities.MainActivity;
+import com.example.mydrivers.Model.LocationViewModel;
 import com.example.mydrivers.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -55,7 +64,6 @@ public class SigninFragment extends Fragment {
             hideKeyboard();
             return false;
         });
-
         return view;
     }
     private void hideKeyboard(){
