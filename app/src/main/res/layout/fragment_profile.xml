@@ -89,7 +89,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:drawablePadding="16dp"
-            android:maxLines="3"
+            android:maxLines="5"
             android:background="@drawable/rounded_edittext"
             app:drawableStartCompat="@drawable/icon_gps_black" />
 

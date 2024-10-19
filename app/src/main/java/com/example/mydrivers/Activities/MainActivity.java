@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -28,13 +30,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class  MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private FirebaseFirestore firestore;
-    private String currentUserId;
+    private String currentUserId, address;
     private LocationViewModel locationViewModel;
     ActivityMainBinding binding;
     LocationManager locationManager;
@@ -89,8 +93,7 @@ public class  MainActivity extends AppCompatActivity {
     }
 
     private void updateLocation(double latitude, double longitude) {
-        String location = ("Latitude: " + latitude + ",\nLongitude: " + longitude);
-        locationViewModel.setLocation(location);
+        getAddressFromLatLong(this, latitude, longitude);
         Map<String, Object> updateData = new HashMap<>();
         updateData.put("latitude", latitude);
         updateData.put("longitude", longitude);
@@ -108,5 +111,20 @@ public class  MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    public void getAddressFromLatLong(Context context, double latitude, double longitude){
+        try {
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && addresses.size() > 0){
+                address = addresses.get(0).getAddressLine(0);
+            }
+            String location = ("Latitude: " + latitude + "\nLongitude: " + longitude + "\n" + address);
+            locationViewModel.setLocation(location);
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
