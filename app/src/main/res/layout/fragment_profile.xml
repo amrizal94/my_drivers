@@ -1,17 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:text="Profile Fragment" />
+        android:layout_centerInParent="true"
+        android:layout_margin="30dp"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30sp"
+            android:layout_marginEnd="30sp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_camera"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <TextView
+            android:id="@+id/tx_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:text="Name"
+            android:gravity="center_vertical"
+            android:textSize="24sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:background="@drawable/rounded_edittext"
+            app:drawableStartCompat="@drawable/icon_user" />
+
+        <TextView
+            android:id="@+id/tx_email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:text="Email"
+            android:gravity="center_vertical"
+            android:textSize="24sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:background="@drawable/rounded_edittext"
+            app:drawableStartCompat="@drawable/icon_email_black" />
+
+        <TextView
+            android:id="@+id/tx_number"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:text="Number Phone"
+            android:gravity="center_vertical"
+            android:textSize="24sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:drawablePadding="16dp"
+            android:background="@drawable/rounded_edittext"
+            app:drawableStartCompat="@drawable/icon_hp" />
+
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

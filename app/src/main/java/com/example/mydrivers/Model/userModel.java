@@ -1,18 +1,46 @@
 package com.example.mydrivers.Model;
 
 public class userModel {
-    private String userName, userEmail, userNumber, userPassword, userId;
+    private String userName, userEmail, userNumber, userPassword, userId, longitude, latitude, imageProfile;
 
     public userModel(){
 
     }
 
-    public userModel(String userName, String userEmail, String userNumber, String userPassword, String userId){
+    public userModel(String userName, String userEmail, String userNumber, String userPassword,
+                     String userId, String longitude, String latitude, String imageProfile){
         this.userName = userName;
         this.userEmail = userEmail;
         this.userNumber = userNumber;
         this.userPassword = userPassword;
         this.userId = userId;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.imageProfile = imageProfile;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getImageProfile() {
+        return imageProfile;
+    }
+
+    public void setImageProfile(String imageProfile) {
+        this.imageProfile = imageProfile;
     }
 
     public String getUserName() {

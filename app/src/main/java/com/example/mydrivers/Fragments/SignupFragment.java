@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class SignupFragment extends Fragment {
     private FirebaseFirestore firestore;
     String UserId;
     KProgressHUD kProgressHUD;
+    ViewPager viewPager;
 
 
 
@@ -74,6 +76,7 @@ public class SignupFragment extends Fragment {
 
         signUpButton.setOnClickListener(v -> SignUpUser());
 
+        viewPager = requireActivity().findViewById(R.id.view_pager);
 
         return view;
     }
@@ -111,10 +114,13 @@ public class SignupFragment extends Fragment {
                          UserId = firebaseAuth.getCurrentUser().getUid();
                     }
                     DocumentReference UserInfo =  firestore.collection("Users").document(UserId);
-                    userModel model = new userModel(name, email,number, password, UserId);
+                    userModel model = new userModel(name, email,number, password, UserId, "", "", "");
                     UserInfo.set(model, SetOptions.merge())
-                            .addOnSuccessListener(unused -> Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(unused -> {
+                                Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+                                viewPager.setCurrentItem(0);
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
                 }
             }).addOnFailureListener(e -> {
                 kProgressHUD.dismiss();
