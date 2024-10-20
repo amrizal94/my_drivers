@@ -79,7 +79,6 @@ public class  MainActivity extends AppCompatActivity {
             locationListener = location -> {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-
                 updateLocation(latitude, longitude);
             };
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
@@ -95,8 +94,9 @@ public class  MainActivity extends AppCompatActivity {
     private void updateLocation(double latitude, double longitude) {
         getAddressFromLatLong(this, latitude, longitude);
         Map<String, Object> updateData = new HashMap<>();
-        updateData.put("latitude", latitude);
-        updateData.put("longitude", longitude);
+        updateData.put("latitude", String.valueOf(latitude));
+        updateData.put("longitude", String.valueOf(longitude));
+        updateData.put("realLocation", address);
 
         firestore.collection("Users").document(currentUserId)
                 .update(updateData)

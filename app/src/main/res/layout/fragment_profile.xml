@@ -34,6 +34,7 @@
                     android:id="@+id/image_profile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/your_photo_profile"
                     android:padding="10dp"
                     android:src="@drawable/icon_camera"/>
             </LinearLayout>
@@ -44,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
-            android:text="Name"
+            android:text="@string/name"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -57,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
-            android:text="Email"
+            android:text="@string/email"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -70,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
-            android:text="Number Phone"
+            android:text="@string/number_phone"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -83,10 +84,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
-            android:text="Location"
+            android:text="@string/location"
             android:layout_marginTop="30dp"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:paddingEnd="16dp"
             android:drawablePadding="16dp"
             android:maxLines="5"
@@ -100,3 +103,6 @@
 
 
 </RelativeLayout>
+
+
+

@@ -37,4 +37,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="wrong_email_or_password">Wrong email or password</string>
     <string name="forgot_password">Forgot Password!</string>
+    <string name="number_phone">Number Phone</string>
+    <string name="location">Location</string>
+    <string name="your_photo_profile">your photo profile</string>
 </resources>

@@ -1,14 +1,14 @@
 package com.example.mydrivers.Model;
 
 public class userModel {
-    private String userName, userEmail, userNumber, userPassword, userId, longitude, latitude, imageProfile;
+    private String userName, userEmail, userNumber, userPassword, userId, longitude, latitude, imageProfile, realLocation;
 
     public userModel(){
 
     }
 
     public userModel(String userName, String userEmail, String userNumber, String userPassword,
-                     String userId, String longitude, String latitude, String imageProfile){
+                     String userId, String longitude, String latitude, String imageProfile, String realLocation){
         this.userName = userName;
         this.userEmail = userEmail;
         this.userNumber = userNumber;
@@ -17,6 +17,15 @@ public class userModel {
         this.longitude = longitude;
         this.latitude = latitude;
         this.imageProfile = imageProfile;
+        this.realLocation = realLocation;
+    }
+
+    public String getRealLocation() {
+        return realLocation;
+    }
+
+    public void setRealLocation(String realLocation) {
+        this.realLocation = realLocation;
     }
 
     public String getLongitude() {
