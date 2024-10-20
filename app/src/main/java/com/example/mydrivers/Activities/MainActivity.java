@@ -1,17 +1,22 @@
 package com.example.mydrivers.Activities;
 
+import static java.security.AccessController.getContext;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.provider.Settings;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,14 +30,12 @@ import com.example.mydrivers.Fragments.PilotFragment;
 import com.example.mydrivers.Fragments.ProfileFragment;
 import com.example.mydrivers.Model.LocationViewModel;
 import com.example.mydrivers.R;
+import com.example.mydrivers.Services.LocationService;
+import com.example.mydrivers.Utils.PushLocation;
 import com.example.mydrivers.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class  MainActivity extends AppCompatActivity {
@@ -86,28 +89,85 @@ public class  MainActivity extends AppCompatActivity {
             }catch (Exception e){
                 Toast.makeText(this, "Reqeust GPS failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+            try {
+                Intent serviceIntent = new Intent(this, LocationService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(serviceIntent);
+                } else {
+                    startService(serviceIntent);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(this, "background service failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-//                showPermissionExplanation();
+                showPermissionExplanation(Manifest.permission.ACCESS_FINE_LOCATION,
+                        "Location access is required to track your location.",
+                        LOCATION_PERMISSION_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             }
         }
     }
 
-    private void updateLocation(double latitude, double longitude) {
-        getAddressFromLatLong(this, latitude, longitude);
-        Map<String, Object> updateData = new HashMap<>();
-        updateData.put("latitude", String.valueOf(latitude));
-        updateData.put("longitude", String.valueOf(longitude));
-        updateData.put("realLocation", address);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getCurrentLocation();
+            } else {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showSettingsDialog();
+                }
+            }
+        }
+    }
 
-        firestore.collection("Users").document(currentUserId)
-                .update(updateData)
-                .addOnSuccessListener(unused -> Toast.makeText(this, "Location updated", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> {
-                    e.printStackTrace();
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Location Permission");
+        builder.setMessage("This app needs location permission. You can grant it in app settings.");
+        builder.setPositiveButton("Go to Settings", (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            closeApp();
+        });
+        builder.show();
+    }
+
+    private void closeApp() {
+        Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+        finishAffinity();
+        System.exit(0);
+    }
+
+    private void showPermissionExplanation(String permission, String message, final int requestCode) {
+        new AlertDialog.Builder(this)
+                .setTitle("Permission Required")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Request the permission after explaining
+                    requestPermissions(new String[]{permission}, requestCode);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Handle the cancel action if necessary
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                })
+                .create()
+                .show();
+    }
+
+    private void updateLocation(double latitude, double longitude) {
+        address = PushLocation.updateLocation(this, firestore, currentUserId, latitude,longitude);
+        String location = ("Latitude: " + latitude + "\nLongitude: " + longitude + "\n" + address);
+        locationViewModel.setLocation(location);
     }
 
     private void replaceFragment(Fragment fragment){
@@ -115,20 +175,5 @@ public class  MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
-    }
-
-    public void getAddressFromLatLong(Context context, double latitude, double longitude){
-        try {
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && addresses.size() > 0){
-                address = addresses.get(0).getAddressLine(0);
-            }
-            String location = ("Latitude: " + latitude + "\nLongitude: " + longitude + "\n" + address);
-            locationViewModel.setLocation(location);
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 }

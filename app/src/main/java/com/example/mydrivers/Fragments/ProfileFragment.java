@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -32,14 +30,11 @@ import com.example.mydrivers.Activities.Authentication;
 import com.example.mydrivers.Model.LocationViewModel;
 import com.example.mydrivers.Model.userModel;
 import com.example.mydrivers.R;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.mydrivers.Services.LocationService;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -98,28 +93,25 @@ public class ProfileFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Konfirmasi Logout")
                 .setMessage("Anda yakin ingin logout?")
-                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Logika logout
-                        FirebaseAuth.getInstance().signOut();
-                        // Di mana saja Anda melakukan logout
-                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove("lastLoginTime");
-                        editor.apply();
+                .setPositiveButton("Ya", (dialog, which) -> {
+                    // Logika logout
+                    FirebaseAuth.getInstance().signOut();
+                    // Di mana saja Anda melakukan logout
+                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("lastLoginTime");
+                    editor.apply();
 
-                        startActivity(new Intent(getActivity(), Authentication.class));
-                        requireActivity().finish();
+                    Intent serviceIntent = new Intent(requireActivity(), LocationService.class);
+                    requireActivity().stopService(serviceIntent);
 
-                        Toast.makeText(getContext(), "Anda telah logout", Toast.LENGTH_SHORT).show();
-                    }
+                    startActivity(new Intent(getActivity(), Authentication.class));
+                    requireActivity().finish();
+
+                    Toast.makeText(getContext(), "Anda telah logout", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Tutup dialog jika pengguna menekan "Tidak"
-                    }
+                .setNegativeButton("Tidak", (dialog, which) -> {
+                    dialog.dismiss(); // Tutup dialog jika pengguna menekan "Tidak"
                 });
 
         // Tampilkan dialog
@@ -210,27 +202,28 @@ public class ProfileFragment extends Fragment {
     }
 
     private void GetUserprofile(){
-        userListener = firestore.collection("Users").document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Toast.makeText(getContext(), "Listen failed "+ error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                if (snapshots != null) {
-                    user = snapshots.toObject(userModel.class);
-                    if (user != null){
-                        if (user.getImageProfile() != null){
-                            Picasso.get().load(user.getImageProfile()).into(ivProfile);
-                        }
-                        if (user.getUserName() != null){
-                            tv_name.setText(user.getUserName());
-                        }
-                        if (user.getUserEmail() != null){
-                            tv_email.setText(user.getUserEmail());
-                        }
-                        if (user.getUserNumber() != null){
-                            tv_number.setText(user.getUserNumber());
-                        }
+        userListener = firestore.collection("Users").document(currentUserId).addSnapshotListener((snapshots, error) -> {
+            if (error != null) {
+                Toast.makeText(getContext(), "Listen failed "+ error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            if (snapshots != null) {
+                user = snapshots.toObject(userModel.class);
+                if (user != null){
+                    if (user.getImageProfile() != null){
+                        Picasso.get().load(user.getImageProfile()).into(ivProfile);
+                    }
+                    if (user.getUserName() != null){
+                        tv_name.setText(user.getUserName());
+                    }
+                    if (user.getUserEmail() != null){
+                        tv_email.setText(user.getUserEmail());
+                    }
+                    if (user.getUserNumber() != null){
+                        tv_number.setText(user.getUserNumber());
+                    }
+                    if (user.getLongitude() != null && user.getLatitude() != null && user.getRealLocation() != null){
+                        String location = ("Latitude: " + user.getLatitude() + "\nLongitude: " + user.getLongitude() + "\n" + user.getRealLocation());
+                        tv_location.setText(location);
                     }
                 }
             }
