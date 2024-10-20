@@ -2,7 +2,11 @@ package com.example.mydrivers.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -24,11 +28,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mydrivers.Activities.Authentication;
 import com.example.mydrivers.Model.LocationViewModel;
 import com.example.mydrivers.Model.userModel;
 import com.example.mydrivers.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -79,9 +85,46 @@ public class ProfileFragment extends Fragment {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
+        // Inisialisasi Floating Action Button
+        FloatingActionButton fabLogout = view.findViewById(R.id.fab_logout);
+        fabLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
+
         locationViewModel.getLocation().observe(getViewLifecycleOwner(), location -> tv_location.setText(location));
         GetUserprofile();
         return view;
+    }
+
+    private void showLogoutConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Konfirmasi Logout")
+                .setMessage("Anda yakin ingin logout?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Logika logout
+                        FirebaseAuth.getInstance().signOut();
+                        // Di mana saja Anda melakukan logout
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove("lastLoginTime");
+                        editor.apply();
+
+                        startActivity(new Intent(getActivity(), Authentication.class));
+                        requireActivity().finish();
+
+                        Toast.makeText(getContext(), "Anda telah logout", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss(); // Tutup dialog jika pengguna menekan "Tidak"
+                    }
+                });
+
+        // Tampilkan dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void CheckStoragePermission() {

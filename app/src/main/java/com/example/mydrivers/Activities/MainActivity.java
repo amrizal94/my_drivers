@@ -81,7 +81,11 @@ public class  MainActivity extends AppCompatActivity {
                 double longitude = location.getLongitude();
                 updateLocation(latitude, longitude);
             };
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
+            try {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
+            }catch (Exception e){
+                Toast.makeText(this, "Reqeust GPS failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 //                showPermissionExplanation();

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,6 +39,7 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
         <TextView
             android:id="@+id/tx_name"
             android:layout_width="match_parent"
@@ -96,13 +96,19 @@
             android:background="@drawable/rounded_edittext"
             app:drawableStartCompat="@drawable/icon_gps_black" />
 
-
-
-
     </LinearLayout>
 
-
+    <!-- Floating Action Button untuk Logout -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="656dp"
+        android:src="@drawable/logout" /> <!-- Ganti dengan icon logout Anda -->
 </RelativeLayout>
-
-
-
