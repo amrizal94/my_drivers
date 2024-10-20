@@ -99,27 +99,20 @@ public class PilotFragment extends Fragment  {
                 }
                 driverInfoAdapter adapter = new driverInfoAdapter(userInfoList, getContext(), driverModel -> {
                     // Handle user selection
-                    double latitude = Double.parseDouble(model.getLatitude());
-                    double longitude = Double.parseDouble(model.getLongitude());
-
-                    // Kirim data latitude dan longitude ke MapFragment
-                    Bundle bundle = new Bundle();
-                    bundle.putDouble("latitude", latitude);
-                    bundle.putDouble("longitude", longitude);
+                    double latitude = Double.parseDouble(driverModel.getLatitude());
+                    double longitude = Double.parseDouble(driverModel.getLongitude());
 
                     // Dapatkan MainActivity dan set tab Map di BottomNavigationView
                     MainActivity mainActivity = (MainActivity) getActivity();
                     if (mainActivity != null) {
-                        // Ganti tab yang dipilih
                         mainActivity.binding.bottomNavigationView.setSelectedItemId(R.id.item_map);
 
-                        // Kirim data ke MapFragment
-                        MapFragment mapFragment = new MapFragment();
-                        mapFragment.setArguments(bundle);
+                        // Kirim data latitude dan longitude ke MapFragment menggunakan newInstance
+                        MapFragment fragment = MapFragment.newInstance(driverModel.getUserName(), latitude, longitude);
 
                         // Ganti ke MapFragment
                         mainActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frame_layout, mapFragment)
+                                .replace(R.id.frame_layout, fragment)
                                 .addToBackStack(null)
                                 .commit();
                     }
@@ -133,6 +126,8 @@ public class PilotFragment extends Fragment  {
 
         });
     }
+
+
 
     public void getAddressFromLatLong(Context context, double latitude, double longitude){
         String address = "";

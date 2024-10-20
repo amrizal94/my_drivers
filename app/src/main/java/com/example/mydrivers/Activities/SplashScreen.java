@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,10 +40,28 @@ public class SplashScreen extends AppCompatActivity {
         text1.setAnimation(Bottom_anim);
         text2.setAnimation(Bottom_anim);
 
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreen.this, Authentication.class);
-            startActivity(intent);
-            finish();
-        }, SPLASH_TIME_OUT);
+        // Ambil SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        long lastLoginTime = sharedPreferences.getLong("lastLoginTime", 0);
+        long currentTimeMillis = System.currentTimeMillis();
+
+        // Hitung waktu login terakhir
+        if (lastLoginTime != 0 && (currentTimeMillis - lastLoginTime) < (3 * 30 * 24 * 60 * 60 * 1000L)) {
+            // Jika belum 3 bulan, lanjutkan ke MainActivity
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        } else {
+            // Jika sudah 3 bulan atau tidak ada waktu login terakhir, arahkan ke SignInActivity
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreen.this, Authentication.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        }
+
+
     }
 }

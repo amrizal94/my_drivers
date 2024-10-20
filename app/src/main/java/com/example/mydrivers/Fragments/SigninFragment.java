@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import com.example.mydrivers.Activities.MainActivity;
 import com.example.mydrivers.Model.LocationViewModel;
@@ -91,6 +92,12 @@ public class SigninFragment extends Fragment {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 kProgressHUD.dismiss();
                 if (task.isSuccessful()){
+                    long currentTimeMillis = System.currentTimeMillis();
+                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("lastLoginTime", currentTimeMillis);
+                    editor.apply();
+
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     startActivity(intent);
                 }
