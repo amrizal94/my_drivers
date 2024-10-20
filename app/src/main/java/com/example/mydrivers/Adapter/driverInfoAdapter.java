@@ -8,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mydrivers.Model.userModel;
 import com.example.mydrivers.R;
+import com.example.mydrivers.SelectListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,10 +21,12 @@ import java.util.ArrayList;
 public class driverInfoAdapter extends RecyclerView.Adapter<driverInfoAdapter.ViewHolder>{
     private ArrayList<userModel> driverList;
     private Context context;
+    private SelectListener listener;
 
-    public driverInfoAdapter(ArrayList<userModel> driverList, Context context) {
+    public driverInfoAdapter(ArrayList<userModel> driverList, Context context, SelectListener listener) {
         this.driverList = driverList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +42,12 @@ public class driverInfoAdapter extends RecyclerView.Adapter<driverInfoAdapter.Vi
         holder.userName.setText(model.getUserName());
         holder.userEmail.setText(model.getUserEmail());
         holder.userNumber.setText(model.getUserNumber());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClicked(model);
+            }
+        });
         String location = ("Latitude: " + model.getLatitude() + "\nLongitude: " + model.getLongitude() + "\n" + model.getRealLocation());
         holder.userLocation.setText(location);
         Picasso.get().load(model.getImageProfile()).into(holder.userProfile);
@@ -56,6 +66,7 @@ public class driverInfoAdapter extends RecyclerView.Adapter<driverInfoAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView userProfile;
         private TextView userName, userEmail, userNumber, userLocation;
+        public CardView cardView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userProfile = itemView.findViewById(R.id.iv_users_profile);
@@ -63,6 +74,7 @@ public class driverInfoAdapter extends RecyclerView.Adapter<driverInfoAdapter.Vi
             userEmail = itemView.findViewById(R.id.tv_emailUser);
             userNumber = itemView.findViewById(R.id.tv_number);
             userLocation = itemView.findViewById(R.id.tv_location);
+            cardView = itemView.findViewById(R.id.main_container);
         }
     }
 }

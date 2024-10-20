@@ -40,7 +40,7 @@ public class  MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private String currentUserId, address;
     private LocationViewModel locationViewModel;
-    ActivityMainBinding binding;
+    public ActivityMainBinding binding;
     LocationManager locationManager;
     LocationListener locationListener;
 
