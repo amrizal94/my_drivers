@@ -76,29 +76,15 @@ public class PilotFragment extends Fragment  {
 
                 for (DocumentSnapshot document : docs) {
                     model = document.toObject(userModel.class);
-
-                    if (model != null) {
-                        String longitude = model.getLongitude();
-                        String latitude = model.getLatitude();
-
-                        if (longitude != null && latitude != null) {
-                            try {
-                                double lat = Double.parseDouble(latitude);
-                                double longi = Double.parseDouble(longitude);
-
-                                getAddressFromLatLong(getContext(), lat, longi);
-
-                                model.setRealLocation(location);
-                                userInfoList.add(model);
-
-                            } catch (NumberFormatException e) {
-                                Toast.makeText(getContext(), "GetDriverInfo: "+"Invalid latitude/longitude format " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
+                    userInfoList.add(model);
                 }
+                
                 driverInfoAdapter adapter = new driverInfoAdapter(userInfoList, getContext(), driverModel -> {
                     // Handle user selection
+                    if (driverModel.getLatitude() == null || driverModel.getLongitude() == null){
+                        Toast.makeText(getContext(), "unknown coordinates", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     double latitude = Double.parseDouble(driverModel.getLatitude());
                     double longitude = Double.parseDouble(driverModel.getLongitude());
 
@@ -125,23 +111,6 @@ public class PilotFragment extends Fragment  {
             }
 
         });
-    }
-
-
-
-    public void getAddressFromLatLong(Context context, double latitude, double longitude){
-        String address = "";
-        try {
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && addresses.size() > 0){
-                address = addresses.get(0).getAddressLine(0);
-            }
-            location = address;
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**

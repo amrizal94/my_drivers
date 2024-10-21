@@ -31,19 +31,20 @@ public class PushLocation {
 
     // Assume this is your method to get address from latitude and longitude
     private static String getAddressFromLatLong(Context context, double latitude, double longitude) {
-        String location = "";
         String address = "";
         try {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && addresses.size() > 0){
+            if (addresses != null && !addresses.isEmpty()){
                 address = addresses.get(0).getAddressLine(0);
             }
-             location = ("Latitude: " + latitude + "\nLongitude: " + longitude + "\n" + address);
+            if (address.isEmpty()){
+                address = "address unknown";
+            }
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        return location;
+        return address;
     }
 }

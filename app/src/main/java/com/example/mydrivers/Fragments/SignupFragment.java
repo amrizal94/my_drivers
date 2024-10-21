@@ -114,7 +114,7 @@ public class SignupFragment extends Fragment {
                          UserId = firebaseAuth.getCurrentUser().getUid();
                     }
                     DocumentReference UserInfo =  firestore.collection("Users").document(UserId);
-                    userModel model = new userModel(name, email,number, password, UserId, "", "", "https://firebasestorage.googleapis.com/v0/b/my-drivers-5f757.appspot.com/o/photo%2F1077114.png?alt=media&token=11522a25-e1db-4766-aed9-00ec51aa109b","");
+                    userModel model = new userModel(name, email,number, "", UserId, "", "", "https://firebasestorage.googleapis.com/v0/b/my-drivers-5f757.appspot.com/o/photo%2F1077114.png?alt=media&token=11522a25-e1db-4766-aed9-00ec51aa109b","");
                     UserInfo.set(model, SetOptions.merge())
                             .addOnSuccessListener(unused -> {
                                 Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();

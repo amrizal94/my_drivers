@@ -85,7 +85,7 @@ public class  MainActivity extends AppCompatActivity {
                 updateLocation(latitude, longitude);
             };
             try {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
             }catch (Exception e){
                 Toast.makeText(this, "Reqeust GPS failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
